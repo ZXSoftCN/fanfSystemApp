@@ -1,7 +1,7 @@
 
 import { hashHistory } from 'react-router'
 import { message } from 'antd'
-import { loginByTicket, staff, nav, login as loginApi, getBtns } from '@apis/common'
+import { loginByToken, staff, nav, login as loginApi, getBtns } from '@apis/common'
 
 export function parseQueryString(url) {
   const obj = {}
@@ -18,7 +18,7 @@ export function parseQueryString(url) {
 
 /* --------------验证ticket并获取用户信息和菜单信息 --------------*/
 const _fetchLoginByTicket = async ticket => new Promise((resolve) => {
-  loginByTicket({ ticket }, (response) => {
+  loginByToken({ ticket }, (response) => {
     resolve(response.data)
   }, (response) => {
     const obj = parseQueryString(window.location.href)
@@ -152,8 +152,8 @@ export const fetchBtns = (component, cb) => {
 
 // 进入路由的判断
 export const isLogin = (nextState, replaceState) => {
-  if (nextState.location.query && nextState.location.query.ticket) { // 如果url自带ticket
-    sessionStorage.setItem('token', 'ticket')
+  if (nextState.location.query && nextState.location.query.token) { // 如果url自带token
+    sessionStorage.setItem('token', nextState.location.query.token)
   }
   if (nextState.location.query && nextState.location.query.key) { // 如果url自带key
     sessionStorage.setItem('token', 'key')

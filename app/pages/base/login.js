@@ -4,15 +4,17 @@ import { connect } from 'react-redux'
 import { hashHistory, Link } from 'react-router'
 import { Spin, Form, Icon, Input, Button, Row, Col, message } from 'antd'
 import { regExpConfig } from '@reg'
-import { brandName } from '@config'
+import { brandName, baseURL, path } from '@config'
 import { clearGformCache2, login } from '@actions/common'
 import { /* login,  */staff, menu } from '@apis/common'
 import Logo from '@components/logo/logo'
 import QueuiAnim from 'rc-queue-anim'
+import { createApi } from '@ajax'
 
 // import '@styles/base.less'
 import '@styles/login.less'
 
+const option = { baseURL: baseURL }// mockURL
 const FormItem = Form.Item
 
 @connect((state, props) => ({
@@ -52,15 +54,15 @@ export default class Login extends Component {
         this.setState({ loading: true })
         this.props.dispatch(login(values, (res) => {
           sessionStorage.setItem('token', res.data.token)
-          sessionStorage.setItem('ticket', res.data.ticket)
+          // sessionStorage.setItem('ticket', res.data.ticket) //使用token进行JWT认证
           menu({}, (response) => {
             const nav = response.data.list || []
             if (nav && nav[0]) {
               sessionStorage.setItem('gMenuList', JSON.stringify(nav))
-              sessionStorage.setItem('topMenuReskey', nav[0].resKey)
+              sessionStorage.setItem('topMenuReskey', nav[0].pathKey)
               sessionStorage.setItem('leftNav', JSON.stringify(nav))
-
-              staff({ usercode: query.username }, (resp) => {
+              const staffGet = createApi(`${path}//user/userinfo?userName=${query.username}`, option)
+              staffGet({ userName: query.username }, (resp) => {
                 hashHistory.push('/')
               }, (r) => {
                 message.warning(r.msg)
@@ -68,6 +70,14 @@ export default class Login extends Component {
                   loading: false,
                 })
               })
+              // staff({ userName: query.username }, (resp) => {
+              //   hashHistory.push('/')
+              // }, (r) => {
+              //   message.warning(r.msg)
+              //   this.setState({
+              //     loading: false,
+              //   })
+              // })
             }
           }, (r) => {
             // message.warning(r.msg)
@@ -126,9 +136,9 @@ export default class Login extends Component {
                                 {getFieldDecorator('username', {
                                   rules: [
                                     {
-                                      required: true, min: 4, max: 10, message: '用户名为4-10个字符',
+                                      required: true, min: 3, max: 10, message: '用户名为3-10个字符',
                                     },
-                                    { pattern: regExpConfig.policeNo, message: '账号4-10位数字或字母组成' },
+                                    { pattern: regExpConfig.policeNo, message: '账号3-10位数字或字母组成' },
                                   ],
                                 })(<Input addonBefore={<Icon type="user" />} placeholder="请输入用户名" type="text" />)}
                               </FormItem>

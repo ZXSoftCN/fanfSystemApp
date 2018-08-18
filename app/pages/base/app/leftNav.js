@@ -69,14 +69,14 @@ export default class LeftNav extends Component {
     let curSub
     navList.map((item, index) => {
       // console.log(item.resKey)
-      if (item.children && item.children.length > 0) {
+      if (item.subMenus && item.subMenus.length > 0) {
         len++
       }
-      if (item.resKey && curPath === item.resKey.split('$')[0].replace('/', '')) {
+      if (item.pathKey && curPath === item.pathKey.split('$')[0].replace('/', '')) {
         curSub = len
-      } else if (item.children && item.children.length > 0) {
-        item.children.map((record) => {
-          if (item.resKey && curPath === record.resKey.split('$')[0].replace('/', '')) {
+      } else if (item.subMenus && item.subMenus.length > 0) {
+        item.subMenus.map((record) => {
+          if (item.pathKey && curPath === record.pathKey.split('$')[0].replace('/', '')) {
             curSub = len
           }
         })
@@ -129,13 +129,13 @@ export default class LeftNav extends Component {
   // 二级菜单的生成
   renderLeftNav(options) {
     const self = this
-    const children = JSON.parse(sessionStorage.getItem('leftNav')) || []
-    return children.map((item, index) => {
-      if (!item.children || item.children.length === 0) {
+    const subMenus = JSON.parse(sessionStorage.getItem('leftNav')) || []
+    return subMenus.map((item, index) => {
+      if (!item.subMenus || item.subMenus.length === 0) {
         return (
-          <Menu.Item key={item.resKey ? item.resKey : item.id} name={item.resName} style={{ paddingLeft: 0 }}>
-            <i className={`qqbicon qqbicon-${item.resIcon}`} title={item.resName} />
-            <span className="menu-name">{item.resName}</span>
+          <Menu.Item key={item.pathKey ? item.pathKey : item.id} name={item.name} style={{ paddingLeft: 0 }}>
+            <i className={`qqbicon qqbicon-${item.iconClassName}`} title={item.name} />
+            <span className="menu-name">{item.name}</span>
           </Menu.Item>
         )
       }
@@ -143,17 +143,17 @@ export default class LeftNav extends Component {
         <SubMenu key={`sub${index}`}
           title={
             <span>
-              <Icon type="caret-down" title={item.resName} />
-              <span className="menu-name">{item.resName}</span>
+              <Icon type="caret-down" title={item.name} />
+              <span className="menu-name">{item.name}</span>
             </span>
           }
         >
           {
-            item.children.map((child, _index) =>
+            item.subMenus.map((child, _index) =>
               (
-                <Menu.Item key={child.resKey ? child.resKey : child.id} name={child.resName}>
-                  <i className={`qqbicon qqbicon-${child.resIcon}`} title={child.resName} />
-                  <span className="menu-name">{child.resName}</span>
+                <Menu.Item key={child.pathKey ? child.pathKey : child.id} name={child.name}>
+                  <i className={`qqbicon qqbicon-${child.iconClassName}`} title={child.name} />
+                  <span className="menu-name">{child.name}</span>
                 </Menu.Item>
               ))
           }

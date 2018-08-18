@@ -1,10 +1,10 @@
 {
-  "name": "duxiaodu",
+  "name": "fanfSystemApp",
   "version": "0.0.2",
-  "description": "duxiaodu",
+  "description": "fanfanFamily System Manager",
   "repository": {
     "type": "git",
-    "url": "https://github.com/duxianwei520/react"
+    "url": "https://github.com/ZXSoftCN/fanfSystemApp"
   },
   "private": true,
   "scripts": {
@@ -18,7 +18,7 @@
   "author": "duxiaodu",
   "contributors": [
     {
-      "name": "HanQ"
+      "name": "leolee"
     }
   ],
   "devDependencies": {

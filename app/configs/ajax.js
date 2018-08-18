@@ -119,9 +119,10 @@ export const oftenFetchByPost = (api, options) => {
   return (...rest) => { // 参数:(data:Object,sucess?:Function,failure?:Function,config?:Object)
     // 参数分析
     const data = rest[0] || {}
-    const token = sessionStorage.getItem('token')
-    if (token) {
-      // data.token = token
+    const valueToken = sessionStorage.getItem('token')
+    if (valueToken) {
+      // data.token = valueToken
+      baseConfig.headers = { ...baseConfig.headers, token: valueToken }
     }
     let success = null
     let failure = null
@@ -155,6 +156,7 @@ export const oftenFetchByPost = (api, options) => {
     })
       .then(response => response.data)
       .then((response) => {
+        message.warning(response);
         switch (response.status) {
           case 1: { success && success(response); break }
           case 0: {

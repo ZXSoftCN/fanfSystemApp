@@ -1,14 +1,19 @@
 import { handleActions } from 'redux-actions'
+import { fromJS } from 'immutable'
 
 // 登陆返回结果
 const loginState = () => ({ })
 export const loginResponse = handleActions({
   'request login'(state, action) {
+    // return state.set('loading', true);// immutable
     return { ...state, loading: true }
   },
   'receive login'(state, action) {
     // eslint-disable-next-line no-unused-vars
-    const { req, res } = action.payload
+    const { req, res } = action.payload // 变量解构赋值
+    // const itemLoad = fromJS({ data: res, loading: false })// immutable
+    // const newState = state.merge(itemLoad)
+    // return newState;
     return { data: res, loading: false }
   },
 }, loginState())

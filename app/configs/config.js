@@ -3,8 +3,8 @@ export const set = 'set$'
 export const brandName = 'React' // slogan
 
 // 开发环境默认配置
-let _serverIp = 'http://192.168.1.222'
-let _port = '1111'
+let _serverIp = 'http://localhost' // 'http://192.168.1.222'
+let _port = '8081'
 let _baseURL = `${_serverIp}:${_port}`
 let _mockURL = 'http://localhost:1111/'
 
@@ -20,7 +20,8 @@ if (process.env.NODE_ENV === 'production') { // 发布环境
 }
 
 export const serverIp = _serverIp
-export const path = '/mock'
-export const timeout = '15000' // 接口超时限制(ms)
+export const path = '/api'
+// export const path = '/mock'
+export const timeout = '150000' // 接口超时限制(ms)
 export const baseURL = _baseURL
 export const mockURL = _mockURL

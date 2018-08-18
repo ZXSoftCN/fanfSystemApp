@@ -59,8 +59,8 @@ export default class App extends Component {
   }
 
   init() {
-    const { query } = this.props.location
-    if (query.ticket) { // 如果是url路径带ticket的话，那么在当前页面做登录的初始化
+    const { query } = this.props.location//用于处理url?params1=value1&params2-=value2中的parms*
+    if (query.token) { // 如果是url路径带token的话，那么在当前页面做登录的初始化
       validateTickit(this.props.location, (res) => {
         this.setState({
           idRenderChild: true,
@@ -114,13 +114,13 @@ export default class App extends Component {
   compare(children, pathname) {
     children.map((item) => {
       // console.log(item.resKey)
-      if (item.resKey.indexOf('platform') > -1) {
+      if (item.pathKey.indexOf('platform') > -1) {
         if (!this.flag && (sessionStorage.getItem('topMenuReskey') !== 'set$')) {
-          this.topMenuReskeyFlag = item.resKey
-          this.topMenuReskeyChild = item.children
+          this.topMenuReskeyFlag = item.pathKey
+          this.topMenuReskeyChild = item.subMenus
         }
       }
-      const _resKey = `${item.resKey.replace(/[\$\.\?\+\^\[\]\(\)\{\}\|\\\/]/g, '\\$&').replace(/\*\*/g, '[\\w|\\W]+').replace(/\*/g, '[^\\/]+')}$`
+      const _resKey = `${item.pathKey.replace(/[\$\.\?\+\^\[\]\(\)\{\}\|\\\/]/g, '\\$&').replace(/\*\*/g, '[\\w|\\W]+').replace(/\*/g, '[^\\/]+')}$`
       if (new RegExp(_resKey).test(pathname)) {
         // console.log(item.id)
         this.flag = true
@@ -129,8 +129,8 @@ export default class App extends Component {
         sessionStorage.setItem('topMenuReskey', this.topMenuReskeyFlag)
         this.setState({ menuId: item.id, topMenuReskey: this.topMenuReskeyFlag })
         return null
-      } else if (item.children) {
-        this.compare(item.children, pathname)
+      } else if (item.subMenus) {
+        this.compare(item.subMenus, pathname)
       }
       return null
     })
@@ -148,36 +148,36 @@ export default class App extends Component {
   // 顶级菜单点击事件的切换
   topMenuClick = (item, index) => {
     // console.log(item)
-    if (!item.children) {
+    if (!item.subMenus) {
       message.info('顶级菜单至少要有一个下级菜单')
       return
     }
     // sessionStorage.setItem('leftNav', JSON.stringify(item.children))
     // this.setState({ leftNav: item.children })
-    sessionStorage.setItem('topMenuReskey', item.resKey)
-    this.setState({ topMenuReskey: item.resKey })
+    sessionStorage.setItem('topMenuReskey', item.pathKey)
+    this.setState({ topMenuReskey: item.pathKey })
     // if (index === 3) {
     //   this.set = true
     // } else {
     //   this.set = false
     // }
 
-    if (item.resKey === 'controlCenter') {
+    if (item.pathKey === 'controlCenter') {
       let hasIndex = false
-      item.children.map((i) => {
-        if (i.resKey === 'screen$/default') {
+      item.subMenus.map((i) => {
+        if (i.pathKey === 'screen$/default') {
           hasIndex = true
         }
       })
       if (hasIndex) {
-        hashHistory.push(item.children[0].resKey)
+        hashHistory.push(item.subMenus[0].pathKey)
       } else {
         hashHistory.push('mission$/my$')
       }
-    } else if (item.children[0] && item.children[0] && item.children[0].children && item.children[0].children[0]) {
-      hashHistory.push(item.children[0].children[0].resKey)
+    } else if (item.subMenus[0] && item.subMenus[0] && item.subMenus[0].subMenus && item.subMenus[0].subMenus[0]) {
+      hashHistory.push(item.subMenus[0].subMenus[0].pathKey)
     } else {
-      hashHistory.push(item.children[0].resKey)
+      hashHistory.push(item.subMenus[0].pathKey)
     }
   }
 
