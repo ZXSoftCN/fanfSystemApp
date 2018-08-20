@@ -4,17 +4,17 @@ import { connect } from 'react-redux'
 import { Button, Layout, message } from 'antd'
 import { hashHistory } from 'react-router'
 import {
-  fetchModuleList, // 获取模块列表
-  fetchModuleDelete, // 删除模块
-  fetchModuleDetail, // 获取模块详情
-  fetchChangeModuleStatus, // 修改模块详情
-  fetchModuleUpdateDetail, // 修改模块详情
-  fetchModuleAdd, // 新增模块
+  fetchModuleList, // 获取菜单列表
+  fetchModuleDelete, // 删除菜单
+  fetchModuleDetail, // 获取菜单详情
+  fetchChangeModuleStatus, // 修改菜单详情
+  fetchModuleUpdateDetail, // 修改菜单详情
+  fetchModuleAdd, // 新增菜单
   fetchButtonList, // 按钮权限列表
 } from '@apis/manage'
 
 import ModuleList from './moduleList'
-import ModuleModal from './modal/moduleAdd' // 新增修改模块
+import ModuleModal from './modal/moduleAdd' // 新增修改菜单
 import ButtonModal from './modal/buttonModal' // 按钮权限列表
 import AddButtonModal from './modal/addButtonModal' // 新增修改按钮权限
 
@@ -73,7 +73,7 @@ export default class userManage extends Component {
 
   // 组件已经加载到dom中
   componentWillMount() {
-    // 做判断，如果是超级管理员，才会显示模块管理权限
+    // 做判断，如果是超级管理员，才会显示菜单管理权限
     if (!(sessionStorage.getItem('roleName') === '0')) {
       // if (!(sessionStorage.getItem('roleName') === '超级管理员' && sessionStorage.getItem('usercode') === 'admin')) {
       // hashHistory.goBack()
@@ -82,7 +82,7 @@ export default class userManage extends Component {
     this.getTableList()
   }
 
-  // 删除模块
+  // 删除菜单
   handleDelete(id) {
     fetchModuleDelete({ id: id }, (result) => {
       message.success(result.msg)
@@ -90,7 +90,8 @@ export default class userManage extends Component {
     })
   }
 
-  // 修改模块
+  //ToDo 修改因提交Entity对象的json
+  // 修改菜单
   handleModify(id, parentid) {
     fetchModuleDetail({ id: id }, (result) => {
       this.setState({
@@ -99,21 +100,21 @@ export default class userManage extends Component {
     })
   }
 
-  // 更改模块状态
+  // 更改菜单状态
   handleChangeStatus(id, val) {
     fetchChangeModuleStatus({ id: id, status: val }, (result) => {
       this.getTableList()
     })
   }
 
-  // 新增模块
+  // 新增菜单
   moduleAdd() {
     this.setState({
       Visible: true, title: '新增菜单', pid: '', type: 'add',
     })
   }
 
-  // 新增模块子菜单
+  // 新增菜单子菜单
   handleAddNode(id) {
     this.setState({
       Visible: true, title: '新增子菜单', pid: id, type: 'add',
@@ -238,7 +239,7 @@ export default class userManage extends Component {
             <Content>
               {/* <div className="page-header">
                 <div className="text-right">
-                  <Button type="primary" onClick={this.moduleAdd} > 新增模块</Button>
+                  <Button type="primary" onClick={this.moduleAdd} > 新增菜单</Button>
                 </div>
               </div> */}
               <div className="page-content">
@@ -255,7 +256,7 @@ export default class userManage extends Component {
               </div>
               <div className="page-footer">
                 <div className="page-footer-buttons">
-                  <Button type="primary" onClick={this.moduleAdd} > 新增模块</Button>
+                  <Button type="primary" onClick={this.moduleAdd} > 新增菜单</Button>
                 </div>
               </div>
             </Content>

@@ -4,7 +4,7 @@ import { connect } from 'react-redux'
 import TweenOne from 'rc-tween-one'
 import ticker from 'rc-tween-one/lib/ticker'
 import PropTypes from 'prop-types'
-import logo from '@images/login.png'
+import syslogo from '@images/FiNELiNK.png'
 import './logo.css'
 
 @connect((state, props) => ({
@@ -21,7 +21,7 @@ export default class app extends Component {
   };
 
   static defaultProps = {
-    image: logo,
+    image: syslogo,
     // className: 'logo-gather-demo',
     w: 1038,
     h: 280,

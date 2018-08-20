@@ -10,13 +10,15 @@ export default class ModuleList extends Component {
   }
 
   renderColumn() {
-    const { onDelete, onModify, onUpdataStatus, onAddNode, buttonList } = this.props
+    const {
+      onDelete, onModify, onUpdataStatus, onAddNode, buttonList,
+    } = this.props
     return [
       {
         title: '功能',
-        dataIndex: 'resName',
+        dataIndex: 'name',
         width: '40%',
-        key: 'resName',
+        key: 'name',
         render: function (text, record, index) {
           return (
             <span>{text}</span>
@@ -31,9 +33,9 @@ export default class ModuleList extends Component {
           <span>
             <a onClick={() => onAddNode(record.id)}>新增</a>
             <span className="ant-divider" />
-            <a onClick={() => onModify(record.id, record.parentid)}>修改</a>
+            <a onClick={() => onModify(record.id, record.parentMenuId)}>修改</a>
             {
-              text.children && text.children.length > 0 ?
+              text.subMenus && text.subMenus.length > 0 ?
                 null :
                 <span>
                   <span className="ant-divider" />
@@ -42,17 +44,17 @@ export default class ModuleList extends Component {
                   </Popconfirm>
                 </span>
             }
-            {
-              record.resName !== '模块管理' ? (
-                <span>
-                  <span className="ant-divider" />
-                  <Popconfirm title={`确定${text.status ? '显示' : '隐藏'}该模块?`} onConfirm={() => onUpdataStatus(text.id, `${text.status ? 0 : 1}`)}>
-                    <a>{text.status ? '显示模块' : '隐藏模块'}</a>
-                  </Popconfirm>
-                </span>) : null
-            }
+            {/* { */}
+            {/* record.resName !== '模块管理' ? ( */}
+            {/* <span> */}
+            {/* <span className="ant-divider" /> */}
+            {/* <Popconfirm title={`确定${text.status ? '显示' : '隐藏'}该模块?`} onConfirm={() => onUpdataStatus(text.id, `${text.status ? 0 : 1}`)}> */}
+            {/* <a>{text.status ? '显示模块' : '隐藏模块'}</a> */}
+            {/* </Popconfirm> */}
+            {/* </span>) : null */}
+            {/* } */}
             <span className="ant-divider" />
-            <a onClick={() => buttonList(record.id, record.parentid)}>按钮权限</a>
+            <a onClick={() => buttonList(record.id, record.parentMenuId)}>按钮权限</a>
           </span>
         ),
       },
@@ -61,9 +63,7 @@ export default class ModuleList extends Component {
         width: '20%',
         render: function (text, record, index) {
           return (
-            record.resName !== '模块管理' ? (
-              <span>{record.status ? <span className="error">未上线</span> : <span className="success">已上线</span>}</span>
-              ) : <span className="success">已上线</span>
+            <span>{record.status ? <span className="error">未启用</span> : <span className="success">已启用</span>}</span>
           )
         },
       },

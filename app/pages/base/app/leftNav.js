@@ -19,7 +19,7 @@ export default class LeftNav extends Component {
     const { pathname } = props.location
     this.state = {
       current: pathname,
-      openKeys: ['sub1'],
+      openKeys: ['desk$'],
       isLeftNavMini: false,
       collapsed: false,
     }
@@ -126,41 +126,85 @@ export default class LeftNav extends Component {
     })
   }
 
-  // 二级菜单的生成
-  renderLeftNav(options) {
-    const self = this
-    const subMenus = JSON.parse(sessionStorage.getItem('leftNav')) || []
-    return subMenus.map((item, index) => {
-      if (!item.subMenus || item.subMenus.length === 0) {
+  addIconItem(item) {
+    if (item.iconType) {
+      return (<Icon type={item.iconType} title={item.name} />)
+    } else if (item.iconClassName) {
+      return (<i className={`qqbicon qqbicon-${item.iconClassName}`} title={item.name} />)
+    }
+    return null;
+  }
+    expandLoopNav = (itemLoop) => {
+      if (!itemLoop.subMenus || itemLoop.subMenus.length === 0) {
         return (
-          <Menu.Item key={item.pathKey ? item.pathKey : item.id} name={item.name} style={{ paddingLeft: 0 }}>
-            <i className={`qqbicon qqbicon-${item.iconClassName}`} title={item.name} />
-            <span className="menu-name">{item.name}</span>
+          <Menu.Item key={itemLoop.pathKey ? itemLoop.pathKey : itemLoop.id} name={itemLoop.name} style={{ paddingLeft: 0 }}>
+            {
+              this.addIconItem(itemLoop)
+            }
+            {/* { itemLoop.iconType ? <Icon type={itemLoop.iconType} title={itemLoop.name} /> : null} */}
+            {/* { itemLoop.iconType ? <Icon type="caret-up" title={itemLoop.name} /> : <Icon type="caret-down" title={itemLoop.name} />} */}
+            <span className="menu-name">{itemLoop.name}</span>
           </Menu.Item>
         )
       }
+
       return (
-        <SubMenu key={`sub${index}`}
+        <SubMenu key={itemLoop.pathKey}
           title={
             <span>
-              <Icon type="caret-down" title={item.name} />
-              <span className="menu-name">{item.name}</span>
+              <Icon type="caret-down" title={itemLoop.name} />
+              <span className="menu-name">{itemLoop.name}</span>
             </span>
           }
         >
           {
-            item.subMenus.map((child, _index) =>
-              (
-                <Menu.Item key={child.pathKey ? child.pathKey : child.id} name={child.name}>
-                  <i className={`qqbicon qqbicon-${child.iconClassName}`} title={child.name} />
-                  <span className="menu-name">{child.name}</span>
-                </Menu.Item>
-              ))
+            itemLoop.subMenus.map((child, _index) => this.expandLoopNav(child))
           }
         </SubMenu>
-      )
-    })
-  }
+      );
+    }
+
+    renderLeftNav(options) {
+      const self = this
+      const children = JSON.parse(sessionStorage.getItem('leftNav')) || []
+      return children.map((item, index) => this.expandLoopNav(item))
+    }
+
+  // 二级菜单的生成
+    renderLeftNavDeprecated(options) {
+      const self = this
+      const subMenus = JSON.parse(sessionStorage.getItem('leftNav')) || []
+      return subMenus.map((item, index) => {
+        if (!item.subMenus || item.subMenus.length === 0) {
+          return (
+            <Menu.Item key={item.pathKey ? item.pathKey : item.id} name={item.name} style={{ paddingLeft: 0 }}>
+              <i className={`qqbicon qqbicon-${item.iconClassName}`} title={item.name} />
+              <span className="menu-name">{item.name}</span>
+            </Menu.Item>
+          )
+        }
+        return (
+          <SubMenu key={`sub${index}`}
+            title={
+              <span>
+                <Icon type="caret-down" title={item.name} />
+                <span className="menu-name">{item.name}</span>
+              </span>
+            }
+          >
+            {
+              item.subMenus.map((child, _index) =>
+                (
+                  <Menu.Item key={child.pathKey ? child.pathKey : child.id} name={child.name}>
+                    <i className={`qqbicon qqbicon-${child.iconClassName}`} title={child.name} />
+                    <span className="menu-name">{child.name}</span>
+                  </Menu.Item>
+                ))
+            }
+          </SubMenu>
+        )
+      })
+    }
 
   // 左侧菜单高亮的控制
   leftMenuHighLight = () => {
@@ -183,7 +227,7 @@ export default class LeftNav extends Component {
           <Spin spinning={false}>
             <Menu onClick={this._handleClick}
               theme="dark"
-              openKeys={this.state.openKeys}
+              // openKeys={this.state.openKeys}
               onOpenChange={this._handleToggle}
               selectedKeys={this.leftMenuHighLight()}
               mode="inline"

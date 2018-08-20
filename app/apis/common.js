@@ -7,7 +7,8 @@ const option = { baseURL: baseURL }// mockURL
 
 export const login = createApi('/login', option) // 登陆 createApi(`${path}/${prefix}/login`, option)
 // export const login = createApi(`${path}/${prefix}/login`, option) // 登陆 createApi(`${path}/${prefix}/login`, option)
-export const logout = createApi(`${path}/${prefix}/logout`, option) // 登出
+export const logout = createApi('/logout', option) // 登出
+// export const logout = createApi(`${path}/${prefix}/logout`, option) // 登出
 export const loginByToken = createApi('/loginByToken', option) // 通过token登陆
 // export const loginByTicket = createApi(`${path}/${prefix}/loginByToken, option) // 通过ticket登陆
 export const loginByKey = createApi(`${path}/service/pagerservice/checkKey`, option) // 通过key进入项目

@@ -59,7 +59,7 @@ export default class App extends Component {
   }
 
   init() {
-    const { query } = this.props.location//用于处理url?params1=value1&params2-=value2中的parms*
+    const { query } = this.props.location// 用于处理url?params1=value1&params2-=value2中的parms*
     if (query.token) { // 如果是url路径带token的话，那么在当前页面做登录的初始化
       validateTickit(this.props.location, (res) => {
         this.setState({
